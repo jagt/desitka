@@ -39,4 +39,12 @@ class Auxi
 			throw msg;
 		}
 	}
+	
+	static inline public function int_max(a:Int, b:Int):Int {
+		return a > b ? a : b;
+	}
+	
+	static inline public function int_abs(a:Int):Int {
+		return a > 0 ? a : -a;
+	}
 }

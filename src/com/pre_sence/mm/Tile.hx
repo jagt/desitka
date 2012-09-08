@@ -105,9 +105,14 @@ class Tile extends Sprite
 			   .ease(Quad.easeOut);
 	}
 	
+	public function destroy():Void {
+		on_klll_complete();
+	}
+	
 	public function next_to(tile:Tile):Bool {
-		var dist:Int = (row - tile.row) * (col - tile.col);
-		return dist >= -1 && dist <= 1;
+		var dist:Int = Auxi.int_max(Auxi.int_abs(row - tile.row),
+									Auxi.int_abs(col - tile.col));
+		return dist <= 1;
 	}
 	
 	private function set_select(sel:Bool):Bool {

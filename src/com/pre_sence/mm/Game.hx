@@ -58,6 +58,15 @@ class TileStack
 		return get_length() == 0;
 	}
 	
+	public function sum():Int {
+		Auxi.assert(is_full(), "sum when not full.");
+		var sum = 0;
+		for (tile in arr) {
+			sum += tile.value;
+		}
+		return sum;
+	}
+	
 	private function get_length():Int {
 		return topIx + 1;
 	}
@@ -75,6 +84,7 @@ class Game extends Sprite
 	private static var COLS:Int = 10;
 	private static var ROWS:Int = 10;
 	private static var SELECTING:Int = 3;
+	private static var SUM:Int = 10;
 	
 	public var tiles:Array< Array<Tile> >;
 	public var selected:TileStack;
@@ -102,16 +112,15 @@ class Game extends Sprite
 		return new Point(col * Auxi.tileSize, row * Auxi.tileSize);
 	}
 	
-	private function add_tile(row:Int, col:Int, value:Int, animate:Bool = true):Tile {
+	private function add_tile(row:Int, col:Int, value:Int, depth:Int = 0):Tile {
 		var tile = Tile.get_avail_tile();
 		tile.row = row;
 		tile.col = col;
 		var pos = get_pos(row, col);
 		tile.reset(pos.x, pos.y, value);
 		
-		
-		if (animate) {
-			var first = get_pos(-1, col);
+		if (depth < 0) {
+			var first = get_pos(depth, col);
 			tile.x = first.x;
 			tile.y = first.y;
 			tile.drop_to(get_pos(row, col).y);
@@ -124,18 +133,34 @@ class Game extends Sprite
 		addChild(tile);
 		return tile;
 	}
+		
+	private function remove_tile(tile:Tile) {
+		tile.kill();
+		tiles[tile.row][tile.col] = null;
+	}
 	
-	private function init():Void {
-		// initialize board
-		tiles = new Array< Array<Tile> >();
+	// override this to custom board initiization
+	private function board_initialize():Void {
 		for (row in 0...ROWS) {
 			tiles[row] = new Array<Tile>();
 			for (col in 0...COLS) {
 				var val = Math.floor( Math.random() * 10 );
-				var tile = add_tile(row, col, val, false);
+				var tile = add_tile(row, col, val);
 				tiles[row][col] = tile;
 			}
 		}
+	}
+	
+	// override this to custom when selecting is done
+	private function select_done():Void {
+		clear_selected();
+		drop_tiles();
+	}
+	
+	private function init():Void {
+		// initialize board
+		tiles = new Array< Array<Tile> >();
+		board_initialize();
 		
 		selected = new TileStack(SELECTING);
 		
@@ -143,8 +168,62 @@ class Game extends Sprite
 		addEventListener(MouseEvent.CLICK, this_onClick);
 	}
 	
-	// event handlers
+	private function destroy():Void {
+		for (arr in tiles) {
+			for (tile in arr) {
+				tile.destroy();
+			}
+		}
+	}
+
 	
+	private function clear_selected():Void {
+		Auxi.assert(selected.is_full(), "clear on not full");
+		var modded = selected.sum() % SUM;
+		if (modded == 0) {
+			for (tile in selected.arr) {
+				remove_tile(tile);
+			}
+		} else {
+			for (ix in 0...selected.length-1) {
+				remove_tile(selected.arr[ix]);
+			}
+			selected.top.value = modded;
+		}
+		selected.clear();
+	}
+	
+	private function drop_tiles():Void {
+		for (col in 0...COLS) {
+			var spaces = 0;
+			for (row in 0...ROWS) {
+				// search from bottom up
+				var ix = (ROWS - 1) - row;
+				var tile = tiles[ix][col];
+				
+				if (tile == null) {
+					++spaces;
+				} else if (spaces > 0) {
+					Auxi.assert(tile.alive == true);
+					// find a tile, need to drop
+					var pos = get_pos(ix + spaces, col);
+					var drop_row = ix + spaces;
+					tile.drop_to(pos.y);
+					tile.row = drop_row;
+					tiles[drop_row][col] = tile;
+					tiles[ix][col] = null;
+				}
+			}
+			
+			// fill in empty tiles
+			for (ix in 0...spaces) {
+				var depth = (spaces - 1);
+				//add_tile(row, col, Math.floor( Math.random() * 10 ), depth);
+			}
+		}
+	}
+	
+	// event handlers
 	private function this_onClick(event:MouseEvent):Void {
 		if (Std.is(event.target, Tile)) {
 			var tile = cast(event.target, Tile);
@@ -165,6 +244,9 @@ class Game extends Sprite
 				} else {
 					selected.clear();
 				}
+			}
+			if (selected.is_full()) {
+				select_done();
 			}
 			trace(selected.length);
 		}
