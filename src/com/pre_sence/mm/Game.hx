@@ -113,9 +113,11 @@ class Game extends Sprite
 	}
 	
 	private function add_tile(row:Int, col:Int, value:Int, depth:Int = 0):Tile {
+		Auxi.assert(tiles[row][col] == null, "adding to an existing tile");
 		var tile = Tile.get_avail_tile();
 		tile.row = row;
 		tile.col = col;
+		tiles[row][col] = tile;
 		var pos = get_pos(row, col);
 		tile.reset(pos.x, pos.y, value);
 		
@@ -146,7 +148,6 @@ class Game extends Sprite
 			for (col in 0...COLS) {
 				var val = Math.floor( Math.random() * 10 );
 				var tile = add_tile(row, col, val);
-				tiles[row][col] = tile;
 			}
 		}
 	}
@@ -166,6 +167,17 @@ class Game extends Sprite
 		
 		// connect event handlers
 		addEventListener(MouseEvent.CLICK, this_onClick);
+		
+		#if debug
+		// assert all rows and cols have correct row/col
+		for (row in 0...ROWS) {
+			for (col in 0...COLS) {
+				var tile = tiles[row][col];
+				Auxi.assert(tile.row == row);
+				Auxi.assert(tile.col == col);
+			}
+		}
+		#end
 	}
 	
 	private function destroy():Void {
@@ -216,15 +228,40 @@ class Game extends Sprite
 			}
 			
 			// fill in empty tiles
+			//trace(col + " : " + spaces);
 			for (ix in 0...spaces) {
-				var depth = (spaces - 1);
-				//add_tile(row, col, Math.floor( Math.random() * 10 ), depth);
+				var depth = -ix - 1 ;
+				add_tile( depth + spaces, col, 
+					Math.floor( Math.random() * 10 ), depth);
 			}
 		}
+		
+		#if debug
+		// assert all rows and cols have correct row/col
+		for (row in 0...ROWS) {
+			for (col in 0...COLS) {
+				var tile = tiles[row][col];
+				Auxi.assert(tile != null);
+				Auxi.assert(tile.row == row);
+				Auxi.assert(tile.col == col);
+			}
+		}
+		#end
 	}
 	
 	// event handlers
 	private function this_onClick(event:MouseEvent):Void {
+		#if debug
+		if (Std.is(event.target, Tile)) {
+			var tile = cast(event.target, Tile);
+			if (event.shiftKey) {
+				tile.kill();
+				return;
+			} else if (event.altKey) {
+				return;
+			}
+		}
+		#end
 		if (Std.is(event.target, Tile)) {
 			var tile = cast(event.target, Tile);
 			if (!tile.selected) {
@@ -248,7 +285,6 @@ class Game extends Sprite
 			if (selected.is_full()) {
 				select_done();
 			}
-			trace(selected.length);
 		}
 	}
 }

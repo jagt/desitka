@@ -79,6 +79,9 @@ class Tile extends Sprite
 		set_value(value_);
 		visible = true;
 		alive = true;
+		
+		// reset from easing kill
+		scaleX = scaleY = 1;
 	}
 	
 	public function set_value(v:Int):Int {
