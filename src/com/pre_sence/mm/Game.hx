@@ -81,8 +81,8 @@ class TileStack
 
 class Game extends Sprite
 {
-	private static var COLS:Int = 10;
-	private static var ROWS:Int = 10;
+	private static var COLS:Int = 8;
+	private static var ROWS:Int = 8;
 	private static var SELECTING:Int = 3;
 	private static var SUM:Int = 10;
 	
@@ -98,14 +98,18 @@ class Game extends Sprite
 	
 	public function resize(sWidth:Int, sHeight:Int) {
 		var scale = 1.0;
+		trace(width);
 		if (width > sWidth || height > sHeight) {
-			var new_scale_x = sWidth / width;
+			// add a padding to width
+			var new_scale_x = sWidth / (width + 12);
 			var new_scale_y = sHeight / height;
 			scale = Math.min(new_scale_x, new_scale_y);
 			scaleX = scaleY = scale;
 		}
-		x = sWidth / 2 - (width * scale) / 2;
-		y = sHeight / 2 - (height * scale) / 2;
+		trace(scale);
+		trace(width);
+		x = sWidth / 2 - width / 2;
+		y = sHeight / 2 - height / 2;
 	}
 	
 	private function get_pos(row:Int, col:Int):Point {

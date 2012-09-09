@@ -16,7 +16,7 @@ class Tile extends Sprite
 	
 	static public function static_init():Void {
 		tileTextFormat = new TextFormat(Auxi.latoFont.fontName,
-			32, Auxi.backColor);
+			50, Auxi.backColor);
 		tileTextFormat.align = TextFormatAlign.CENTER;
 		
 		tilePool = new Array<Tile>();
@@ -52,16 +52,16 @@ class Tile extends Sprite
 		field.embedFonts = true;
 		field.selectable = false;
 		field.defaultTextFormat = tileTextFormat;
-		field.width = 40;
-		field.height = 40;
-		field.x = 1;
+		field.width = 66;
+		field.height = 66;
+		field.x = -1;
 		field.y = -1;
 		
 		// bounding box
 		block = new Sprite();
 		block.graphics.lineStyle(1.0, Auxi.borderColor);
 		block.graphics.beginFill(Auxi.fontColor);
-		block.graphics.drawRect(0, 0, 42, 42);
+		block.graphics.drawRect(0, 0, Auxi.tileSize, Auxi.tileSize);
 		
 		addChild(block);
 		addChild(field); // field is on top

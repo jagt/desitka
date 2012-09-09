@@ -21,7 +21,7 @@ class Auxi
 	static public var selectedColor:Int = 0x7C9997;
 	static public var backColor:Int = 0x3B4970;
 	
-	static public var tileSize:Int = 42;
+	static public var tileSize:Int = 62;
 	
 	static public var screenWidth:Int;
 	static public var screenHeight:Int;
