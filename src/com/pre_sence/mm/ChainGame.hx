@@ -1,5 +1,7 @@
 package com.pre_sence.mm;
 
+import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.actuators.GenericActuator;
 import Tile.State;
 
 /**
@@ -8,10 +10,15 @@ import Tile.State;
  */
 class SummedTiles
 {
+	private static var FLOATING:Float = 4.0; 
 	public var arr:Array<Tile>;
+	private var cgame:ChainGame;
+	private var timer:IGenericActuator;
 	
-	public function new() {
+	public function new(cgame_:ChainGame) {
 		arr = new Array<Tile>();
+		cgame = cgame_;
+		timer = Actuate.timer(FLOATING).onComplete(clear_complete);
 	}
 	
 	public function next_to(target:Array<Tile>):Bool {
@@ -30,6 +37,22 @@ class SummedTiles
 			arr.push(tile);
 			tile.state = State.Summed;
 		}
+		reset_tween();
+		trace("pushed");
+	}
+	
+	private function reset_tween():Void {
+		Actuate.stop(timer, null, false, false);
+		timer = Actuate.timer(FLOATING).onComplete(clear_complete);
+	}
+	
+	private function clear_complete():Void {
+		for (tile in arr) {
+			cgame.remove_tile(tile);
+		}
+		cgame.summed.remove(this);
+		cgame.drop_tiles();
+		trace("cleared called");
 	}
 }
  
@@ -58,7 +81,7 @@ class ChainGame extends Game
 				break;
 			}
 			if (!found_next_to) {
-				var sumtile = new SummedTiles();
+				var sumtile = new SummedTiles(this);
 				sumtile.push_arr(selected.arr);
 				summed.push(sumtile);
 				trace("new sumtile");
@@ -72,4 +95,5 @@ class ChainGame extends Game
 		}
 		selected.clear();
 	}
+	
 }

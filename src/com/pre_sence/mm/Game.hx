@@ -110,7 +110,6 @@ class Game extends Sprite
 	
 	public function resize(sWidth:Int, sHeight:Int) {
 		var scale = 1.0;
-		trace(width);
 		if (width > sWidth || height > sHeight) {
 			// add a padding to width
 			var new_scale_x = sWidth / (width + 12);
@@ -118,8 +117,6 @@ class Game extends Sprite
 			scale = Math.min(new_scale_x, new_scale_y);
 			scaleX = scaleY = scale;
 		}
-		trace(scale);
-		trace(width);
 		x = sWidth / 2 - width / 2;
 		y = sHeight / 2 - height / 2;
 	}
@@ -152,7 +149,7 @@ class Game extends Sprite
 		return tile;
 	}
 		
-	private function remove_tile(tile:Tile) {
+	public function remove_tile(tile:Tile) {
 		tile.kill();
 		tiles[tile.row][tile.col] = null;
 	}
@@ -222,7 +219,7 @@ class Game extends Sprite
 		}
 	}
 	
-	private function drop_tiles():Void {
+	public function drop_tiles():Void {
 		for (col in 0...COLS) {
 			var spaces = 0;
 			for (row in 0...ROWS) {
@@ -232,6 +229,8 @@ class Game extends Sprite
 				
 				if (tile == null) {
 					++spaces;
+				} else if (tile.state == State.Summed) {
+					spaces = 0; // skip summed tiles
 				} else if (spaces > 0) {
 					Auxi.assert(tile.alive == true);
 					// find a tile, need to drop
@@ -258,9 +257,10 @@ class Game extends Sprite
 		for (row in 0...ROWS) {
 			for (col in 0...COLS) {
 				var tile = tiles[row][col];
-				Auxi.assert(tile != null);
-				Auxi.assert(tile.row == row);
-				Auxi.assert(tile.col == col);
+				if (tile != null) {
+					Auxi.assert(tile.row == row);
+					Auxi.assert(tile.col == col);
+				}
 			}
 		}
 		#end
@@ -281,7 +281,6 @@ class Game extends Sprite
 		#end
 		if (Std.is(event.target, Tile)) {
 			var tile = cast(event.target, Tile);
-			trace(tile.state);
 			if (tile.state != State.Selected) {
 				if (selected.is_empty()) {
 					selected.push(tile);
