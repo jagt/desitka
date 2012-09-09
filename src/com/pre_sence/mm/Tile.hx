@@ -8,8 +8,14 @@ import com.eclecticdesignstudio.motion.easing.Linear;
 import com.eclecticdesignstudio.motion.easing.Quad;
 
 
+enum State {
+	Idle;
+	Selected;
+	Summed;
+}
+
 class Tile extends Sprite
-{
+{	
 	public static var tileTextFormat:TextFormat;
 	public static var tilePool:Array<Tile>;
 	private static var tilePoolSize:Int = 150;
@@ -35,9 +41,10 @@ class Tile extends Sprite
 
 	private var field:TextField;
 	private var block:Sprite;
+	public var state(default, set_state):State;
 	public var moving:Bool;
 	public var alive:Bool;
-	public var selected(default, set_select):Bool;
+	//public var selected(default, set_select):Bool;
 	
 	public var value(default, set_value):Int;
 	public var row:Int;
@@ -69,6 +76,7 @@ class Tile extends Sprite
 		visible = false; // start out invisible
 		moving = false;
 		alive = false;
+		state = State.Idle;
 		mouseChildren = false; // only Tile receives mouse events
 	}
 	
@@ -82,6 +90,8 @@ class Tile extends Sprite
 		
 		// reset from easing kill
 		scaleX = scaleY = 1;
+		// reset state
+		set_state(Idle);
 	}
 	
 	public function set_value(v:Int):Int {
@@ -93,7 +103,8 @@ class Tile extends Sprite
 	public function drop_to(new_y:Float) {
 		Auxi.assert(new_y > y, "must drop to a lower position");
 		moving = true;
-		var duration = (new_y - y) * 0.002;
+		// try to use the same duration
+		var duration = 0.2;//(new_y - y) * 0.004;
 		Actuate.tween(this, duration, { y:new_y })
 			   .onComplete(on_drop_complete)
 			   .ease(Quad.easeIn);
@@ -118,17 +129,20 @@ class Tile extends Sprite
 		return dist <= 1;
 	}
 	
-	private function set_select(sel:Bool):Bool {
-		if (selected == sel) return sel;
-		selected = sel;
-		
-		if (selected) {
+	private function set_state(next_state:State):State {
+		// very simple fsm
+		if (next_state == Selected) {
 			Actuate.transform(block, 0.2).color(Auxi.selectedColor);
-		} else {
+		} else if (next_state == Idle) {
 			Actuate.transform(block, 0.2).color(Auxi.fontColor);
+		} else if (next_state == Summed) {
+			Actuate.transform(block, 0.2).color(Auxi.summedColor);
 		}
-		return selected;
+		
+		state = next_state;
+		return state;
 	}
+	
 	
 	// handlers
 	private function on_drop_complete() {

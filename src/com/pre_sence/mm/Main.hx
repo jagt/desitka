@@ -25,7 +25,7 @@ class Main extends Sprite
 		Auxi.static_init();
 		Tile.static_init();
 		
-		game = new PeaceGame();
+		game = new ChainGame();
 		game.resize(Auxi.screenWidth, Auxi.screenHeight);
 		addChild(game);
 	}

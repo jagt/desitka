@@ -3,6 +3,7 @@ import nme.display.Sprite;
 import nme.events.MouseEvent;
 import nme.events.Event;
 import nme.geom.Point;
+import Tile.State;
 
 /**
  * ...
@@ -28,10 +29,19 @@ class TileStack
 		topIx = -1;
 	}
 	
-	public function clear():Void {
+	// do set to idle
+	public function pop_all():Void {
 		while (!is_empty()) {
 			pop();
 		}
+	}
+	
+	// clear only
+	public function clear():Void {
+		for (ix in 0...cap) {
+			arr[ix] == null;
+		}
+		topIx = -1;
 	}
 	
 	public function push(tile:Tile):Void {
@@ -39,12 +49,13 @@ class TileStack
 			throw "tile stack overflow";
 		}
 		arr[++topIx] = tile;
-		tile.selected = true;
+		tile.state = State.Selected;
+		//tile.selected = true;
 	}
 	
 	public function pop():Tile {
 		var poped = arr[topIx];
-		poped.selected = false;
+		poped.state = State.Idle;
 		arr[topIx] = null;
 		topIx -= 1;
 		return poped;
@@ -89,6 +100,7 @@ class Game extends Sprite
 	public var tiles:Array< Array<Tile> >;
 	public var selected:TileStack;
 	private var selectIx:Int;
+
 	
 	public function new() 
 	{
@@ -200,13 +212,14 @@ class Game extends Sprite
 			for (tile in selected.arr) {
 				remove_tile(tile);
 			}
+			selected.clear();
 		} else {
 			for (ix in 0...selected.length-1) {
 				remove_tile(selected.arr[ix]);
 			}
 			selected.top.value = modded;
+			selected.pop_all();
 		}
-		selected.clear();
 	}
 	
 	private function drop_tiles():Void {
@@ -268,14 +281,15 @@ class Game extends Sprite
 		#end
 		if (Std.is(event.target, Tile)) {
 			var tile = cast(event.target, Tile);
-			if (!tile.selected) {
+			trace(tile.state);
+			if (tile.state != State.Selected) {
 				if (selected.is_empty()) {
 					selected.push(tile);
 				} else {
 					if (selected.top.next_to(tile)) {
 						selected.push(tile);
 					} else {
-						selected.clear();
+						selected.pop_all();
 					}
 				}
 			} else {
@@ -283,7 +297,7 @@ class Game extends Sprite
 				if (selected.top == tile) {
 					selected.pop();
 				} else {
-					selected.clear();
+					selected.pop_all();
 				}
 			}
 			if (selected.is_full()) {
