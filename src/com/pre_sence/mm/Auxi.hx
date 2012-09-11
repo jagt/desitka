@@ -14,6 +14,7 @@ class Auxi
 {
 
 	static public var latoFont:Font;
+	static public var latoBoldFont:Font;
 	
 	// japan pallete form ColourLovers
 	static public var fontColor:Int = 0xE5E7BF;
@@ -21,6 +22,8 @@ class Auxi
 	static public var selectedColor:Int = 0x7C9997;
 	static public var backColor:Int = 0x3B4970;
 	static public var summedColor:Int = 0xEFBAC2;
+	static public var dropColor:Int = 0xEFE3E5;
+	static public var popColor:Int = 0x845567;
 	
 	static public var tileSize:Int = 62;
 	
@@ -30,6 +33,7 @@ class Auxi
 
 	static public function static_init():Void {
 		latoFont = Assets.getFont("assets/Lato-Lig.ttf");
+		latoBoldFont = Assets.getFont("assets/Lato-Bol.ttf");
 		
 		screenWidth = Lib.current.stage.stageWidth;
 		screenHeight = Lib.current.stage.stageHeight;
@@ -47,5 +51,9 @@ class Auxi
 	
 	static inline public function int_abs(a:Int):Int {
 		return a > 0 ? a : -a;
+	}
+	
+	static inline public function center(target:Float, parent:Float):Float {
+		return (parent - target) / 2;
 	}
 }

@@ -1,8 +1,10 @@
 package com.pre_sence.mm;
+import jeash.text.TextFormat;
 import nme.display.Sprite;
 import nme.events.MouseEvent;
 import nme.events.Event;
 import nme.geom.Point;
+import nme.text.TextField;
 import Tile.State;
 
 /**
@@ -94,11 +96,15 @@ class Game extends Sprite
 {
 	private static var COLS:Int = 8;
 	private static var ROWS:Int = 8;
-	private static var SELECTING:Int = 3;
 	private static var SUM:Int = 10;
+	public static var SELECTING:Int = 3;
 	
 	public var tiles:Array< Array<Tile> >;
+	public var tileContainer:Sprite;
 	public var selected:TileStack;
+	public var popup:Popup;
+	public var score:Int;
+	private var scoreField:TextField;
 	private var selectIx:Int;
 
 	
@@ -110,16 +116,18 @@ class Game extends Sprite
 	
 	public function resize(sWidth:Int, sHeight:Int) {
 		var scale = 1.0;
-		if (width > sWidth || height > sHeight) {
+		var w = tileContainer.width;
+		var h = tileContainer.height;
+		if (w > sWidth || h > sHeight) {
 			// add a padding to width
-			var new_scale_x = sWidth / (width + 12);
-			var new_scale_y = sHeight / height;
+			var new_scale_x = sWidth / (w + 12);
+			var new_scale_y = sHeight / h;
 			scale = Math.min(new_scale_x, new_scale_y);
-			scaleX = scaleY = scale;
+			tileContainer.scaleX = tileContainer.scaleY = scale;
 		}
 		// TODO this does not match, which is weird...
-		x = Math.round( (sWidth - width) / 2 );
-		y = Math.round( (sHeight - height) / 2 );
+		tileContainer.x = Math.round( (sWidth - width) / 2 );
+		tileContainer.y = Math.round( (sHeight - height) / 2 );
 	}
 	
 	private function get_pos(row:Int, col:Int):Point {
@@ -146,7 +154,7 @@ class Game extends Sprite
 			tile.y = pos.y;
 		}
 		
-		addChild(tile);
+		tileContainer.addChild(tile);
 		return tile;
 	}
 		
@@ -175,13 +183,23 @@ class Game extends Sprite
 	private function init():Void {
 		// initialize board
 		tiles = new Array< Array<Tile> >();
+		tileContainer = new Sprite();
 		board_initialize();
+		addChild(tileContainer);
 		
 		selected = new TileStack(SELECTING);
+		popup = new Popup(tileContainer);
 		
 		// connect event handlers
 		// check click on tiles before parent
 		addEventListener(MouseEvent.CLICK, this_onClick);//, false, 1);
+		
+		// setup score field
+		//var score_format = new TextFormat(Auxi.latoFont, 40);
+		scoreField = new TextField();
+		scoreField.embedFonts = true;
+		
+		
 		
 		#if debug
 		// assert all rows and cols have correct row/col
@@ -271,6 +289,11 @@ class Game extends Sprite
 		#end
 	}
 	
+	public function add_score_at(tile:Tile, score:Int) {
+		popup.show_at_tile(tile, "+" + score);
+		// TODO add to total score
+	}
+	
 	// event handlers
 	private function this_onClick(event:MouseEvent):Void {
 		#if debug
@@ -284,7 +307,7 @@ class Game extends Sprite
 			}
 		}
 		#end
-		trace(event.target);
+		
 		if (Std.is(event.target, Tile)) {
 			var tile = cast(event.target, Tile);
 			if (tile.state == State.Idle) {
@@ -312,7 +335,6 @@ class Game extends Sprite
 	}
 	
 	public function click_final(event:MouseEvent):Void {
-		trace("wtf");
 		selected.pop_all();
 	}
 }

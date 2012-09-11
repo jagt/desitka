@@ -25,6 +25,7 @@ class Main extends Sprite
 		// do static inits
 		Auxi.static_init();
 		Tile.static_init();
+		Popup.static_init();
 		
 		bg = new Background(Assets.getBitmapData("assets/tile.png"));
 		addChild(bg);

@@ -2,6 +2,8 @@ package com.pre_sence.mm;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.actuators.GenericActuator;
+import com.eclecticdesignstudio.motion.easing.Quad;
+import com.eclecticdesignstudio.motion.easing.Linear;
 import Tile.State;
 
 /**
@@ -10,7 +12,7 @@ import Tile.State;
  */
 class SummedTiles
 {
-	private static var FLOATING:Float = 4.0; 
+	private static var FLOATING:Float = 4.5; 
 	public var arr:Array<Tile>;
 	private var cgame:ChainGame;
 	private var timer:IGenericActuator;
@@ -18,7 +20,7 @@ class SummedTiles
 	public function new(cgame_:ChainGame) {
 		arr = new Array<Tile>();
 		cgame = cgame_;
-		timer = Actuate.timer(FLOATING).onComplete(clear_complete);
+		//start_tween();
 	}
 	
 	public function next_to(target:Array<Tile>):Bool {
@@ -41,13 +43,31 @@ class SummedTiles
 		trace("pushed");
 	}
 	
+	private function start_tween():Void {
+		timer = Actuate.timer(FLOATING).onComplete(clear_complete);
+		for (tile in arr) {
+			Actuate.transform(tile.block, FLOATING)
+				   .color(Auxi.dropColor)
+				   .ease(Quad.easeOut);
+		}
+	}
+	
 	private function reset_tween():Void {
 		Actuate.stop(timer, null, false, false);
-		timer = Actuate.timer(FLOATING).onComplete(clear_complete);
+		Actuate.stop(arr);
+		for (tile in arr) {
+			// hacky way to reset color by set state
+			tile.state = State.Summed;
+		}
+		start_tween();
 	}
 	
 	private function clear_complete():Void {
+		var ix = 0;
 		for (tile in arr) {
+			if (ix++ % Game.SELECTING == 0) {
+				cgame.add_score_at(tile, 10 * (1+Std.int(ix/Game.SELECTING)));
+			}
 			cgame.remove_tile(tile);
 		}
 		cgame.summed.remove(this);
@@ -92,6 +112,7 @@ class ChainGame extends Game
 			}
 			selected.top.value = modded;
 			selected.top.state = State.Idle;
+			add_score_at(selected.top, modded);
 		}
 		selected.clear();
 	}

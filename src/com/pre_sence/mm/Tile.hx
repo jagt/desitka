@@ -40,7 +40,7 @@ class Tile extends Sprite
 	}
 
 	private var field:TextField;
-	private var block:Sprite;
+	public var block:Sprite;
 	public var state(default, set_state):State;
 	public var moving:Bool;
 	public var alive:Bool;
@@ -104,7 +104,7 @@ class Tile extends Sprite
 		Auxi.assert(new_y > y, "must drop to a lower position");
 		moving = true;
 		// try to use the same duration
-		var duration = 0.2;//(new_y - y) * 0.004;
+		var duration = 0.3;//(new_y - y) * 0.004;
 		Actuate.tween(this, duration, { y:new_y })
 			   .onComplete(on_drop_complete)
 			   .ease(Quad.easeIn);
@@ -132,11 +132,11 @@ class Tile extends Sprite
 	private function set_state(next_state:State):State {
 		// very simple fsm
 		if (next_state == Selected) {
-			Actuate.transform(block, 0.2).color(Auxi.selectedColor);
+			Actuate.transform(block).color(Auxi.selectedColor);
 		} else if (next_state == Idle) {
-			Actuate.transform(block, 0.2).color(Auxi.fontColor);
+			Actuate.transform(block).color(Auxi.fontColor);
 		} else if (next_state == Summed) {
-			Actuate.transform(block, 0.2).color(Auxi.summedColor);
+			Actuate.transform(block).color(Auxi.summedColor);
 		}
 		
 		state = next_state;
