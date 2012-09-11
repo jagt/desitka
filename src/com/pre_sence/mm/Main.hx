@@ -1,15 +1,16 @@
 package com.pre_sence.mm;
-
+import nme.Assets;
 import nme.display.Sprite;
 import nme.events.Event;
 import nme.Lib;
 import nme.text.TextField;
 import nme.text.TextFormat;
-
+import nme.events.MouseEvent;
 
 class Main extends Sprite 
 {
 	var game:Game;
+	var bg:Background;
 	
 	public function new() 
 	{
@@ -25,9 +26,14 @@ class Main extends Sprite
 		Auxi.static_init();
 		Tile.static_init();
 		
+		bg = new Background(Assets.getBitmapData("assets/tile.png"));
+		addChild(bg);
+		
 		game = new ChainGame();
 		game.resize(Auxi.screenWidth, Auxi.screenHeight);
 		addChild(game);
+		
+		bg.addEventListener(MouseEvent.CLICK, game.click_final);
 	}
 	
 	static public function main() 

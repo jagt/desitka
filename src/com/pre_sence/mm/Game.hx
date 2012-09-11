@@ -117,6 +117,7 @@ class Game extends Sprite
 			scale = Math.min(new_scale_x, new_scale_y);
 			scaleX = scaleY = scale;
 		}
+		// TODO this does not match, which is weird...
 		x = sWidth / 2 - width / 2;
 		y = sHeight / 2 - height / 2;
 	}
@@ -179,7 +180,8 @@ class Game extends Sprite
 		selected = new TileStack(SELECTING);
 		
 		// connect event handlers
-		addEventListener(MouseEvent.CLICK, this_onClick);
+		// check click on tiles before parent
+		addEventListener(MouseEvent.CLICK, this_onClick);//, false, 1);
 		
 		#if debug
 		// assert all rows and cols have correct row/col
@@ -233,6 +235,9 @@ class Game extends Sprite
 					spaces = 0; // skip summed tiles
 				} else if (spaces > 0) {
 					Auxi.assert(tile.alive == true);
+					if (tile.state == State.Selected) {
+						selected.pop_all();
+					}
 					// find a tile, need to drop
 					var pos = get_pos(ix + spaces, col);
 					var drop_row = ix + spaces;
@@ -279,9 +284,10 @@ class Game extends Sprite
 			}
 		}
 		#end
+		trace(event.target);
 		if (Std.is(event.target, Tile)) {
 			var tile = cast(event.target, Tile);
-			if (tile.state != State.Selected) {
+			if (tile.state == State.Idle) {
 				if (selected.is_empty()) {
 					selected.push(tile);
 				} else {
@@ -303,5 +309,10 @@ class Game extends Sprite
 				select_done();
 			}
 		}
+	}
+	
+	public function click_final(event:MouseEvent):Void {
+		trace("wtf");
+		selected.pop_all();
 	}
 }
