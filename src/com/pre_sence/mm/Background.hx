@@ -26,10 +26,10 @@ class Background extends Sprite
 		graphics.drawRect(0, 0, w, h);
 		graphics.endFill();
 		
-		x = 0;
-		y = 0;
+		x = -Auxi.screenWidth;
+		y = -Auxi.screenHeight;
 		
-		Actuate.tween(this, 60, { x:-w / 2, y:-h / 2 } )
+		Actuate.tween(this, 60, { x:0, y:0 } )
 			   .repeat()
 			   .ease(Linear.easeNone);
 	}

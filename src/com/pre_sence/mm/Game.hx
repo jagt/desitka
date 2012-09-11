@@ -118,8 +118,8 @@ class Game extends Sprite
 			scaleX = scaleY = scale;
 		}
 		// TODO this does not match, which is weird...
-		x = sWidth / 2 - width / 2;
-		y = sHeight / 2 - height / 2;
+		x = Math.round( (sWidth - width) / 2 );
+		y = Math.round( (sHeight - height) / 2 );
 	}
 	
 	private function get_pos(row:Int, col:Int):Point {
