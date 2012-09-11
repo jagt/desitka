@@ -1,4 +1,5 @@
 package com.pre_sence.mm;
+import nme.geom.Point;
 import nme.display.Sprite;
 import nme.text.TextField;
 import nme.text.TextFormat;
@@ -52,8 +53,9 @@ class Popup
 		var field = get_first_avail();
 		field.visible = true;
 		field.text = value;
-		field.x = tile.x + Auxi.center(field.width, Auxi.tileSize);
-		field.y = tile.y;
+		var globpos = tile.localToGlobal(new Point(0, 0));
+		field.x = globpos.x + Auxi.center(field.width, Auxi.tileSize);
+		field.y = globpos.y;
 		trace(field.width);
 		var dist = Auxi.tileSize * 0.7;
 		Actuate.tween(field, 1.0, { y:field.y - dist } ).onComplete(function():Void {

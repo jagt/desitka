@@ -1,5 +1,7 @@
 package com.pre_sence.mm;
-import jeash.text.TextFormat;
+import nme.text.TextFormat;
+import nme.text.TextFormatAlign;
+import nme.text.TextFieldAutoSize;
 import nme.display.Sprite;
 import nme.events.MouseEvent;
 import nme.events.Event;
@@ -103,7 +105,7 @@ class Game extends Sprite
 	public var tileContainer:Sprite;
 	public var selected:TileStack;
 	public var popup:Popup;
-	public var score:Int;
+	public var score(default, set_score):Int;
 	private var scoreField:TextField;
 	private var selectIx:Int;
 
@@ -128,6 +130,10 @@ class Game extends Sprite
 		// TODO this does not match, which is weird...
 		tileContainer.x = Math.round( (sWidth - width) / 2 );
 		tileContainer.y = Math.round( (sHeight - height) / 2 );
+		
+		// set score position
+		scoreField.x = Auxi.center(scoreField.width, Auxi.screenWidth);
+		scoreField.y = 12+Auxi.center(scoreField.height, tileContainer.y);
 	}
 	
 	private function get_pos(row:Int, col:Int):Point {
@@ -188,18 +194,23 @@ class Game extends Sprite
 		addChild(tileContainer);
 		
 		selected = new TileStack(SELECTING);
-		popup = new Popup(tileContainer);
+		popup = new Popup(this);
 		
 		// connect event handlers
 		// check click on tiles before parent
 		addEventListener(MouseEvent.CLICK, this_onClick);//, false, 1);
 		
 		// setup score field
-		//var score_format = new TextFormat(Auxi.latoFont, 40);
+		var scoreFormat = new TextFormat(Auxi.latoFont.fontName,
+			50, Auxi.fontColor);
 		scoreField = new TextField();
+		scoreFormat.align = TextFormatAlign.CENTER;
+		//scoreField.autoSize = TextFieldAutoSize.LEFT;
+		scoreField.defaultTextFormat = scoreFormat;
 		scoreField.embedFonts = true;
-		
-		
+		scoreField.text = "0";
+		scoreField.width = 240;
+		addChild(scoreField);
 		
 		#if debug
 		// assert all rows and cols have correct row/col
@@ -289,9 +300,15 @@ class Game extends Sprite
 		#end
 	}
 	
-	public function add_score_at(tile:Tile, score:Int) {
-		popup.show_at_tile(tile, "+" + score);
-		// TODO add to total score
+	private function set_score(score_:Int):Int {
+		score = score_;
+		scoreField.text = Std.string(score);
+		return score;
+	}
+	
+	public function add_score_at(tile:Tile, added:Int) {
+		popup.show_at_tile(tile, "+" + added);
+		score += added;
 	}
 	
 	// event handlers
