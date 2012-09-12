@@ -6,6 +6,7 @@ import nme.Lib;
 import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.events.MouseEvent;
+import com.eclecticdesignstudio.motion.Actuate;
 
 class Main extends Sprite 
 {
@@ -35,6 +36,9 @@ class Main extends Sprite
 		addChild(game);
 		
 		bg.addEventListener(MouseEvent.CLICK, game.click_final);
+		
+		Lib.current.stage.addEventListener(Event.ACTIVATE, stage_on_activate);		
+		Lib.current.stage.addEventListener(Event.DEACTIVATE, stage_on_deactivate);
 	}
 	
 	static public function main() 
@@ -44,6 +48,16 @@ class Main extends Sprite
 		stage.align = nme.display.StageAlign.TOP_LEFT;
 		
 		Lib.current.addChild(new Main());
+
+	}
+	
+	// handlers
+	private function stage_on_activate(event:Event):Void {
+		Actuate.resumeAll();
+	}
+	
+	private function stage_on_deactivate(event:Event):Void {
+		Actuate.pauseAll();
 	}
 	
 }
