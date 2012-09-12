@@ -6,6 +6,8 @@ import nme.Lib;
 import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.events.MouseEvent;
+import nme.ui.Multitouch;
+import nme.ui.MultitouchInputMode;
 import com.eclecticdesignstudio.motion.Actuate;
 
 class Main extends Sprite 
@@ -46,6 +48,7 @@ class Main extends Sprite
 		var stage = Lib.current.stage;
 		//stage.scaleMode = nme.display.StageScaleMode.NO_SCALE;
 		stage.align = nme.display.StageAlign.TOP_LEFT;
+		Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 		
 		Lib.current.addChild(new Main());
 

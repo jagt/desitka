@@ -24,6 +24,7 @@ class Auxi
 	static public var summedColor:Int = 0xEFBAC2;
 	static public var dropColor:Int = 0xEFE3E5;
 	static public var popColor:Int = 0x845567;
+	static public var markColor:Int = 0xFBC058;
 	
 	static public var tileSize:Int = 62;
 	

@@ -4,6 +4,7 @@ import nme.text.TextFormatAlign;
 import nme.text.TextFieldAutoSize;
 import nme.display.Sprite;
 import nme.events.MouseEvent;
+import nme.events.TouchEvent;
 import nme.events.Event;
 import nme.geom.Point;
 import nme.text.TextField;
@@ -200,6 +201,15 @@ class Game extends Sprite
 		// check click on tiles before parent
 		addEventListener(MouseEvent.CLICK, this_onClick);//, false, 1);
 		
+		// TODO can't find a good way to mark tiles
+		/*
+		#if mobile
+		addEventListener(TouchEvent.TOUCH_OVER, this_onTouchOver);
+		#else
+		addEventListener(MouseEvent.MOUSE_OVER, this_onMouseOver);
+		#end
+		*/
+		
 		// setup score field
 		var scoreFormat = new TextFormat(Auxi.latoFont.fontName,
 			50, Auxi.fontColor);
@@ -353,5 +363,21 @@ class Game extends Sprite
 	
 	public function click_final(event:MouseEvent):Void {
 		selected.pop_all();
+	}
+	
+	private function this_onMouseOver(event:MouseEvent):Void {
+		if (event.buttonDown && Std.is(event.target, Tile)) {
+			var tile = cast(event.target, Tile);
+			tile.set_marked();
+		}
+	}
+	
+	private function this_onMouseMove(event:MouseEvent):Void {
+		// TODO seems target is not working but the event
+		// is properly fired. now uses a hacky way to set mark
+		if (event.buttonDown && Std.is(event.target, Tile)) {
+			var tile = cast(event.target, Tile);
+			tile.set_marked();
+		}
 	}
 }

@@ -1,4 +1,5 @@
 package com.pre_sence.mm;
+import nme.geom.ColorTransform;
 import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
@@ -91,7 +92,9 @@ class Tile extends Sprite
 		// reset from easing kill
 		scaleX = scaleY = 1;
 		// reset state
+		block.transform.colorTransform = new ColorTransform();
 		set_state(Idle);
+		clear_marked();
 	}
 	
 	public function set_value(v:Int):Int {
@@ -141,6 +144,14 @@ class Tile extends Sprite
 		
 		state = next_state;
 		return state;
+	}
+	
+	public function set_marked():Void {
+		Actuate.transform(field).color(Auxi.markColor);
+	}
+	
+	public function clear_marked():Void {
+		field.transform.colorTransform = new ColorTransform();
 	}
 	
 	
