@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.actuators.GenericActuator;
 import com.eclecticdesignstudio.motion.easing.Quad;
 import com.eclecticdesignstudio.motion.easing.Linear;
+import nme.display.Sprite;
 import Tile.State;
 
 /**
@@ -80,11 +81,30 @@ class SummedTiles
 class ChainGame extends Game
 {
 	public var summed:Array<SummedTiles>;
+	private var time:Int;
+	private var bar:Sprite;
 	
-	public function new() 
+	public function new(time_:Int)
 	{
 		super();
 		summed = new Array<SummedTiles>();
+		time = time_;
+		
+		bar = new Sprite();
+		bar.graphics.beginFill(Auxi.fontColor);
+		addChild(bar);
+	}
+	
+	override public function resize(sWidth:Int, sHeight:Int):Dynamic 
+	{
+		super.resize(sWidth, sHeight);
+		bar.graphics.drawRect(0, 0, width * 0.9, 8);
+		bar.x = Auxi.center(bar.width, Auxi.screenWidth);
+		bar.y = y + height + Auxi.tileSize * 0.5;
+		
+		Actuate.tween(bar, time, { scaleX:0 } )
+			   .ease(Linear.easeNone);
+			   //.onComplete(null); // TODO game over
 	}
 	
 	override private function clear_selected():Void 

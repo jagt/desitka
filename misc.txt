@@ -1,1 +1,3 @@
-1. OnFocus/OnResume set pause, resume all tweens
+Naming: desitka - tens in Czech ftw.
+
+!1. OnFocus/OnResume set pause, resume all tweens
