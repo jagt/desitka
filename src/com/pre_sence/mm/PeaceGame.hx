@@ -43,6 +43,7 @@ class PeaceGame extends Game
 	{
 		Auxi.assert(selected.is_full(), "clear on not full");
 		var sum = selected.sum();
+		sum = sum == 0 ? 10 : sum; // fix 0/0/0
 		var modded = selected.sum() % Game.SUM;
 		if (modded == 0) {
 			add_score_at(selected.top, sum);

@@ -60,7 +60,7 @@ class GameOver extends Sprite
 		if (Main.instance.game != null) {
 			Main.instance.game.destroy();
 		}
-		Main.instance.transit(this, Main.instance.menu);
+		Main.instance.transit(this, Main.instance.menu, true);
 		trace(Main.instance.numChildren);
 		trace("Mem:"+System.totalMemory);
 		System.gc();
