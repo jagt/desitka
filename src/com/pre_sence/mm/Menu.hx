@@ -17,7 +17,6 @@ class Menu extends Sprite
 	public var puzzleMode:TextField;
 	public var zenMode:TextField;
 	public var help:TextField;
-	private var buttonFormat:TextFormat;
 	
 	public function new() 
 	{
@@ -30,32 +29,17 @@ class Menu extends Sprite
 		logo.embedFonts = true;
 		logo.autoSize = TextFieldAutoSize.LEFT;
 		logo.selectable = false;
-		
-		buttonFormat = new TextFormat(Auxi.latoFont.fontName,
-			40, Auxi.backColor);
-		buttonFormat.align = TextFormatAlign.CENTER;
-		puzzleMode = make_button("Puzzle Mode");
-		zenMode = make_button("Zen Mode");
-		help = make_button("Help");
+
+		puzzleMode = Auxi.make_button("Puzzle Mode");
+		zenMode = Auxi.make_button("Zen Mode");
+		help = Auxi.make_button("Help");
 		
 		addChild(logo);
 		addChild(puzzleMode);
 		addChild(zenMode);
 		addChild(help);
 	}
-	
-	private function make_button(text:String):TextField {
-		var but = new TextField();
-		but.defaultTextFormat = buttonFormat;
-		but.background = true;
-		but.backgroundColor = Auxi.fontColor;
-		but.embedFonts = true;
-		but.text = text;
-		but.height = 60;
-		but.selectable = false;
-		return but;
-	}
-	
+
 	public function resize(sWidth:Int, sHeight:Int) {
 		logo.x = Auxi.center(logo.width, sWidth);
 		puzzleMode.width = zenMode.width = help.width = 0.6 * sWidth;

@@ -13,8 +13,9 @@ import com.eclecticdesignstudio.motion.Actuate;
 class Main extends Sprite 
 {
 	public static var instance:Main;
-	var game:Game;
-	var menu:Menu;
+	public var game:Game;
+	public var menu:Menu;
+	public var over:GameOver;
 	var bg:Background;
 	
 	public function new() 
@@ -39,21 +40,32 @@ class Main extends Sprite
 		menu.resize(Auxi.screenWidth, Auxi.screenHeight);
 		addChild(menu);
 		
+		over = new GameOver();
+		over.resize(Auxi.screenWidth, Auxi.screenHeight);
+		addChild(over);
+		
 		Lib.current.stage.addEventListener(Event.ACTIVATE, stage_on_activate);		
 		Lib.current.stage.addEventListener(Event.DEACTIVATE, stage_on_deactivate);
 		menu.puzzleMode.addEventListener(MouseEvent.CLICK, puzzle_click_puzzle);
+		bg.addEventListener(MouseEvent.CLICK, bg_on_click);
 	}
 	
-	public function transit(from:Sprite, to:Sprite, backward:Bool = false) {
+	public function transit(from:Sprite, to:Sprite, ?cb:Void->Void, backward:Bool = false) {
 		if (!backward) {
 			to.x = Auxi.screenWidth;
 			Actuate.tween(from, 1.0, { x: -Auxi.screenWidth } );
-			Actuate.tween(to, 1.0, { x: 0 } );
+			Actuate.tween(to, 1.0, { x: 0 } ).onComplete(cb);
 		} else {
 			to.x = -Auxi.screenWidth;
 			Actuate.tween(from, 1.0, { x: Auxi.screenWidth } );
-			Actuate.tween(to, 1.0, { x: 0 } );
+			Actuate.tween(to, 1.0, { x: 0 } ).onComplete(cb);
 		}
+	}
+	
+	public function game_over() {
+		transit(game, over, game.destroy);
+		over.score.text = "Score : " + game.score;
+		over.score.x = Auxi.center(over.score.width, Auxi.screenWidth);
 	}
 
 	
@@ -67,11 +79,18 @@ class Main extends Sprite
 	}
 	
 	private function puzzle_click_puzzle(event:Event):Void {
-		game = new ChainGame(120);
+		Auxi.assert(game == null);
+		game = new ChainGame(180);
 		game.resize(Auxi.screenWidth, Auxi.screenHeight);
 		addChild(game);
-		bg.addEventListener(MouseEvent.CLICK, game.click_final);
 		transit(menu, game);
+	}
+	
+	private function bg_on_click(event:MouseEvent):Void {
+		// avoid handlers to avoid memleak
+		if (game != null) {
+			game.click_final(event);
+		}
 	}
 	
 	static public function main() 

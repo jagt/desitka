@@ -218,6 +218,7 @@ class Game extends Sprite
 		//scoreField.autoSize = TextFieldAutoSize.LEFT;
 		scoreField.defaultTextFormat = scoreFormat;
 		scoreField.embedFonts = true;
+		scoreField.selectable = false;
 		scoreField.text = "0";
 		scoreField.width = 240;
 		addChild(scoreField);
@@ -234,10 +235,15 @@ class Game extends Sprite
 		#end
 	}
 	
-	private function destroy():Void {
+	public function destroy():Void {
+		trace("destryoied");
+		Main.instance.game = null;
+		parent.removeChild(this);
+		removeEventListener(MouseEvent.CLICK, this_onClick);
 		for (arr in tiles) {
 			for (tile in arr) {
-				tile.destroy();
+				if (tile != null)
+					tile.destroy();
 			}
 		}
 	}

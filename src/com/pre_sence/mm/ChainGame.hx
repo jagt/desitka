@@ -16,7 +16,7 @@ class SummedTiles
 	private static var FLOATING:Float = 4.5; 
 	public var arr:Array<Tile>;
 	private var cgame:ChainGame;
-	private var timer:IGenericActuator;
+	public var timer:IGenericActuator;
 	
 	public function new(cgame_:ChainGame) {
 		arr = new Array<Tile>();
@@ -63,7 +63,7 @@ class SummedTiles
 		start_tween();
 	}
 	
-	private function clear_complete():Void {
+	public function clear_complete():Void {
 		var ix = 0;
 		for (tile in arr) {
 			if (ix++ % Game.SELECTING == 0) {
@@ -95,6 +95,16 @@ class ChainGame extends Game
 		addChild(bar);
 	}
 	
+	private function do_gameover():Void {
+		for (sum in summed) {
+			Actuate.stop(sum.timer);
+			sum.clear_complete();
+		}
+		tileContainer.mouseEnabled = false;
+		tileContainer.mouseChildren = false;
+		Actuate.timer(1.5).onComplete(Main.instance.game_over);
+	}
+	
 	override public function resize(sWidth:Int, sHeight:Int):Dynamic 
 	{
 		super.resize(sWidth, sHeight);
@@ -102,9 +112,9 @@ class ChainGame extends Game
 		bar.x = Auxi.center(bar.width, Auxi.screenWidth);
 		bar.y = y + height + Auxi.tileSize * 0.5;
 		
-		Actuate.tween(bar, time, { scaleX:0 } )
-			   .ease(Linear.easeNone);
-			   //.onComplete(null); // TODO game over
+		Actuate.tween(bar, 2, { scaleX:0 } )
+			   .ease(Linear.easeNone)
+			   .onComplete(do_gameover); // TODO game over
 	}
 	
 	override private function clear_selected():Void 
@@ -135,6 +145,11 @@ class ChainGame extends Game
 			add_score_at(selected.top, modded);
 		}
 		selected.clear();
+	}
+	
+	override public function destroy():Void 
+	{
+		super.destroy();
 	}
 	
 }

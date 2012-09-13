@@ -4,6 +4,10 @@ import nme.Assets;
 import nme.text.Font;
 import nme.text.TextFormat;
 import nme.Lib;
+import nme.text.TextField;
+import nme.text.TextFormat;
+import nme.text.TextFormatAlign;
+import nme.text.TextFieldAutoSize;
 
 /**
  * ...
@@ -15,7 +19,7 @@ class Auxi
 
 	static public var latoFont:Font;
 	static public var latoBoldFont:Font;
-	
+	static public var buttonFormat:TextFormat;
 	// japan pallete form ColourLovers
 	static public var fontColor:Int = 0xE5E7BF;
 	static public var borderColor:Int = 0xDDDFB8;
@@ -38,6 +42,10 @@ class Auxi
 		
 		screenWidth = Lib.current.stage.stageWidth;
 		screenHeight = Lib.current.stage.stageHeight;
+		
+		buttonFormat = new TextFormat(Auxi.latoFont.fontName,
+			40, Auxi.backColor);
+		buttonFormat.align = TextFormatAlign.CENTER;
 	}
 	
 	static public function assert(cond:Bool, msg:String="assert error") {
@@ -56,5 +64,23 @@ class Auxi
 	
 	static inline public function center(target:Float, parent:Float):Float {
 		return (parent - target) / 2;
+	}
+	
+	static public function make_button(text:String):TextField {
+		var but = new TextField();
+		but.defaultTextFormat = buttonFormat;
+		but.background = true;
+		but.backgroundColor = Auxi.fontColor;
+		but.embedFonts = true;
+		but.text = text;
+		but.height = 60;
+		but.selectable = false;
+		return but;
+	}
+	
+	static public function set_field(field:TextField, format:TextFormat):Void {
+		field.defaultTextFormat = format;
+		field.embedFonts = true;
+		field.selectable = false;
 	}
 }
