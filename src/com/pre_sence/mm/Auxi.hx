@@ -48,7 +48,10 @@ class Auxi
 		buttonFormat.align = TextFormatAlign.CENTER;
 	}
 	
-	static public function assert(cond:Bool, msg:String="assert error") {
+	static public function assert(cond:Bool, msg:String = "assert error") {
+		#if release
+		return; // reality check bitch!
+		#end
 		if (!cond) {
 			throw msg;
 		}

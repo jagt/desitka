@@ -47,6 +47,7 @@ class Main extends Sprite
 		Lib.current.stage.addEventListener(Event.ACTIVATE, stage_on_activate);		
 		Lib.current.stage.addEventListener(Event.DEACTIVATE, stage_on_deactivate);
 		menu.puzzleMode.addEventListener(MouseEvent.CLICK, puzzle_click_puzzle);
+		menu.zenMode.addEventListener(MouseEvent.CLICK, zen_click_zen);
 		bg.addEventListener(MouseEvent.CLICK, bg_on_click);
 	}
 	
@@ -81,6 +82,14 @@ class Main extends Sprite
 	private function puzzle_click_puzzle(event:Event):Void {
 		Auxi.assert(game == null);
 		game = new ChainGame(180);
+		game.resize(Auxi.screenWidth, Auxi.screenHeight);
+		addChild(game);
+		transit(menu, game);
+	}
+	
+	private function zen_click_zen(event:Event):Void {
+		Auxi.assert(game == null);
+		game = new PeaceGame();
 		game.resize(Auxi.screenWidth, Auxi.screenHeight);
 		addChild(game);
 		transit(menu, game);

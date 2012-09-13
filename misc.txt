@@ -1,3 +1,9 @@
 Naming: desitka - tens in Czech ftw.
 
 !1. OnFocus/OnResume set pause, resume all tweens
+2. Help.
+3. GiveUp button
+4. Audio, using Ableton Operators
+
+- no bg
+- select(button click), deselect, summed, clear, gameover

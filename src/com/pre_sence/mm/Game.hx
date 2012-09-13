@@ -242,10 +242,13 @@ class Game extends Sprite
 		removeEventListener(MouseEvent.CLICK, this_onClick);
 		for (arr in tiles) {
 			for (tile in arr) {
-				if (tile != null)
+				if (tile != null) {
 					tile.destroy();
+					tile = null;
+				}
 			}
 		}
+		tiles = null;
 	}
 
 	

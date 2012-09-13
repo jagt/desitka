@@ -54,13 +54,17 @@ class SummedTiles
 	}
 	
 	private function reset_tween():Void {
-		Actuate.stop(timer, null, false, false);
-		Actuate.stop(arr);
+		stop_tween();
 		for (tile in arr) {
 			// hacky way to reset color by set state
 			tile.state = State.Summed;
 		}
 		start_tween();
+	}
+	
+	public function stop_tween():Void {
+		Actuate.stop(timer, null, false, false);
+		Actuate.stop(arr);
 	}
 	
 	public function clear_complete():Void {
@@ -71,8 +75,10 @@ class SummedTiles
 			}
 			cgame.remove_tile(tile);
 		}
+		arr = null;
 		cgame.summed.remove(this);
 		cgame.drop_tiles();
+		cgame = null;
 		trace("cleared called");
 	}
 }
@@ -96,9 +102,11 @@ class ChainGame extends Game
 	}
 	
 	private function do_gameover():Void {
-		for (sum in summed) {
-			Actuate.stop(sum.timer);
-			sum.clear_complete();
+		// this becomes hacky since clear_complete removes its self
+		// from the array.
+		while (summed.length > 0) {
+			summed[0].stop_tween();
+			summed[0].clear_complete();
 		}
 		tileContainer.mouseEnabled = false;
 		tileContainer.mouseChildren = false;
@@ -111,10 +119,14 @@ class ChainGame extends Game
 		bar.graphics.drawRect(0, 0, width * 0.9, 8);
 		bar.x = Auxi.center(bar.width, Auxi.screenWidth);
 		bar.y = y + height + Auxi.tileSize * 0.5;
+		bar.mouseEnabled = false;
 		
-		Actuate.tween(bar, 2, { scaleX:0 } )
+		#if debug
+		time = 10;
+		#end
+		Actuate.tween(bar, time, { scaleX:0 } )
 			   .ease(Linear.easeNone)
-			   .onComplete(do_gameover); // TODO game over
+			   .onComplete(do_gameover);
 	}
 	
 	override private function clear_selected():Void 
@@ -150,6 +162,7 @@ class ChainGame extends Game
 	override public function destroy():Void 
 	{
 		super.destroy();
+		Auxi.assert(summed.length == 0);
 	}
 	
 }
