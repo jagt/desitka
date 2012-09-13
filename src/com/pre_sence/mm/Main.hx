@@ -16,7 +16,10 @@ class Main extends Sprite
 	public var game:Game;
 	public var menu:Menu;
 	public var over:GameOver;
-	var bg:Background;
+	public var help:Help;
+	public var bg:Background;
+	
+	private var is_helping:Bool;
 	
 	public function new() 
 	{
@@ -44,10 +47,16 @@ class Main extends Sprite
 		over.resize(Auxi.screenWidth, Auxi.screenHeight);
 		addChild(over);
 		
+		help = new Help();
+		help.resize(Auxi.screenWidth, Auxi.screenHeight);
+		addChild(help);
+		is_helping = false;
+		
 		Lib.current.stage.addEventListener(Event.ACTIVATE, stage_on_activate);		
 		Lib.current.stage.addEventListener(Event.DEACTIVATE, stage_on_deactivate);
 		menu.puzzleMode.addEventListener(MouseEvent.CLICK, puzzle_click_puzzle);
 		menu.zenMode.addEventListener(MouseEvent.CLICK, zen_click_zen);
+		menu.help.addEventListener(MouseEvent.CLICK, help_click_help);
 		bg.addEventListener(MouseEvent.CLICK, bg_on_click);
 	}
 	
@@ -87,6 +96,11 @@ class Main extends Sprite
 		transit(menu, game);
 	}
 	
+	private function help_click_help(event:Event):Void {
+		transit(menu, help);
+		is_helping = true;
+	}
+	
 	private function zen_click_zen(event:Event):Void {
 		Auxi.assert(game == null);
 		game = new PeaceGame();
@@ -99,6 +113,11 @@ class Main extends Sprite
 		// avoid handlers to avoid memleak
 		if (game != null) {
 			game.click_final(event);
+		}
+		
+		if (is_helping) {
+			transit(help, menu, true);
+			is_helping = false;
 		}
 	}
 	

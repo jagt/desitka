@@ -33,5 +33,6 @@ class Background extends Sprite
 			   .repeat()
 			   .ease(Linear.easeNone);
 	}
+
 	
 }
