@@ -42,6 +42,7 @@ class SummedTiles
 			tile.state = State.Summed;
 		}
 		reset_tween();
+		Auxi.sumSnd.play();
 		trace("pushed");
 	}
 	
@@ -80,6 +81,7 @@ class SummedTiles
 		cgame.summed.remove(this);
 		cgame.drop_tiles();
 		cgame = null;
+		Auxi.clearSnd.play();
 		trace("cleared called");
 	}
 }
@@ -158,6 +160,7 @@ class ChainGame extends Game
 			selected.top.value = modded;
 			selected.top.state = State.Idle;
 			add_score_at(selected.top, modded);
+			Auxi.clearSnd.play();
 		}
 		selected.clear();
 	}

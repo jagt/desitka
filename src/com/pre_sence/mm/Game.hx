@@ -346,6 +346,7 @@ class Game extends Sprite
 		giveUp.visible = false;		
 		tileContainer.mouseEnabled = false;
 		tileContainer.mouseChildren = false;
+		Auxi.overSnd.play();
 	}
 	
 	// event handlers
@@ -367,11 +368,14 @@ class Game extends Sprite
 			if (tile.state == State.Idle) {
 				if (selected.is_empty()) {
 					selected.push(tile);
+					Auxi.selectSnd.play();
 				} else {
 					if (selected.top.next_to(tile)) {
 						selected.push(tile);
+						Auxi.selectSnd.play();
 					} else {
 						selected.pop_all();
+						Auxi.deselectSnd.play();
 					}
 				}
 			} else {
@@ -381,6 +385,7 @@ class Game extends Sprite
 				} else {
 					selected.pop_all();
 				}
+				Auxi.deselectSnd.play();
 			}
 			if (selected.is_full()) {
 				select_done();
@@ -392,6 +397,7 @@ class Game extends Sprite
 	
 	public function click_final(event:MouseEvent):Void {
 		selected.pop_all();
+		Auxi.deselectSnd.play();
 	}
 	
 	private function this_onMouseOver(event:MouseEvent):Void {

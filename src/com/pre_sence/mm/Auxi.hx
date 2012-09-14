@@ -1,6 +1,7 @@
 package com.pre_sence.mm;
 
 import nme.Assets;
+import nme.media.Sound;
 import nme.text.Font;
 import nme.text.TextFormat;
 import nme.Lib;
@@ -35,6 +36,11 @@ class Auxi
 	static public var screenWidth:Int;
 	static public var screenHeight:Int;
 	
+	static public var selectSnd:Sound;
+	static public var deselectSnd:Sound;
+	static public var sumSnd:Sound;
+	static public var clearSnd:Sound;
+	static public var overSnd:Sound;
 
 	static public function static_init():Void {
 		latoFont = Assets.getFont("assets/Lato-Lig.ttf");
@@ -46,6 +52,13 @@ class Auxi
 		buttonFormat = new TextFormat(Auxi.latoFont.fontName,
 			40, Auxi.backColor);
 		buttonFormat.align = TextFormatAlign.CENTER;
+		
+		// load sounds
+		selectSnd = Assets.getSound("assets/select.wav");
+		deselectSnd = Assets.getSound("assets/deselect.wav");
+		sumSnd = Assets.getSound("assets/sum.wav");
+		clearSnd = Assets.getSound("assets/clear.wav");
+		overSnd = Assets.getSound("assets/over.wav");
 	}
 	
 	static public function assert(cond:Bool, msg:String = "assert error") {

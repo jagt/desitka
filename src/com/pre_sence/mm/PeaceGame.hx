@@ -71,6 +71,7 @@ class PeaceGame extends Game
 			for (tile in selected.arr) {
 				tile.state = State.Summed;
 			}
+			Auxi.sumSnd.play();
 			selected.clear();
 		} else {
 			for (ix in 0...selected.length-1) {
@@ -78,6 +79,7 @@ class PeaceGame extends Game
 			}
 			selected.top.value = modded;
 			add_score_at(selected.top, modded);
+			Auxi.clearSnd.play();
 			selected.pop_all();
 		}
 		if (!has_more_move()) {

@@ -64,7 +64,8 @@ class GameOver extends Sprite
 		trace(Main.instance.numChildren);
 		trace("Mem:"+System.totalMemory);
 		System.gc();
-		trace("Mem:"+System.totalMemory);
+		trace("Mem:" + System.totalMemory);
+		Auxi.clearSnd.play();
 	}
 	
 }

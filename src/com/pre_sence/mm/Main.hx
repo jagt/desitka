@@ -98,11 +98,13 @@ class Main extends Sprite
 		game.resize(Auxi.screenWidth, Auxi.screenHeight);
 		addChild(game);
 		transit(menu, game);
+		Auxi.clearSnd.play();
 	}
 	
 	private function help_click_help(event:Event):Void {
 		transit(menu, help);
 		is_helping = true;
+		Auxi.clearSnd.play();
 	}
 	
 	private function zen_click_zen(event:Event):Void {
@@ -111,12 +113,14 @@ class Main extends Sprite
 		game.resize(Auxi.screenWidth, Auxi.screenHeight);
 		addChild(game);
 		transit(menu, game);
+		Auxi.clearSnd.play();
 	}
 	
 	private function help_on_click(event:MouseEvent):Void {
 		if (is_helping) {
 			transit(help, menu, true);
 			is_helping = false;
+			Auxi.clearSnd.play();
 		}
 	}
 	
