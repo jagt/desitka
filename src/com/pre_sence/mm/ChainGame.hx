@@ -5,6 +5,7 @@ import com.eclecticdesignstudio.motion.actuators.GenericActuator;
 import com.eclecticdesignstudio.motion.easing.Quad;
 import com.eclecticdesignstudio.motion.easing.Linear;
 import nme.display.Sprite;
+import nme.events.MouseEvent;
 import Tile.State;
 
 /**
@@ -101,15 +102,15 @@ class ChainGame extends Game
 		addChild(bar);
 	}
 	
-	private function do_gameover():Void {
+	override private function do_gameover():Void {
+		super.do_gameover();
+		Actuate.stop(bar);
 		// this becomes hacky since clear_complete removes its self
 		// from the array.
 		while (summed.length > 0) {
 			summed[0].stop_tween();
 			summed[0].clear_complete();
 		}
-		tileContainer.mouseEnabled = false;
-		tileContainer.mouseChildren = false;
 		Actuate.timer(1.5).onComplete(Main.instance.game_over);
 	}
 	

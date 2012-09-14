@@ -107,6 +107,7 @@ class Game extends Sprite
 	public var selected:TileStack;
 	public var popup:Popup;
 	public var score(default, set_score):Int;
+	public var giveUp:TextField;
 	private var scoreField:TextField;
 	private var selectIx:Int;
 
@@ -223,6 +224,17 @@ class Game extends Sprite
 		scoreField.width = 240;
 		addChild(scoreField);
 		
+		var giveUpFormat = new TextFormat(Auxi.latoBoldFont.fontName,
+			64, Auxi.fontColor);
+		giveUpFormat.align = TextFormatAlign.LEFT;
+		giveUp = new TextField();
+		Auxi.set_field(giveUp, giveUpFormat);
+		giveUp.text = " x";
+		giveUp.scaleX = giveUp.scaleY = 0.5;
+		giveUp.x = giveUp.y = 0;
+		
+		addChild(giveUp);
+		
 		#if debug
 		// assert all rows and cols have correct row/col
 		for (row in 0...ROWS) {
@@ -330,6 +342,12 @@ class Game extends Sprite
 		score += added;
 	}
 	
+	private function do_gameover():Void {
+		giveUp.visible = false;		
+		tileContainer.mouseEnabled = false;
+		tileContainer.mouseChildren = false;
+	}
+	
 	// event handlers
 	private function this_onClick(event:MouseEvent):Void {
 		#if debug
@@ -367,6 +385,8 @@ class Game extends Sprite
 			if (selected.is_full()) {
 				select_done();
 			}
+		} else if (event.target == giveUp) {
+			do_gameover();
 		}
 	}
 	
@@ -388,5 +408,9 @@ class Game extends Sprite
 			var tile = cast(event.target, Tile);
 			tile.set_marked();
 		}
+	}
+	
+	private function giveup_onClick(event:MouseEvent):Void {
+		
 	}
 }

@@ -10,14 +10,10 @@ import Tile.State;
  */
 
 class PeaceGame extends Game
-{
-	public var done:TextField;
-	
+{	
 	public function new() 
 	{
 		super();
-		done = Auxi.make_button("Done");
-		//addChild(done);
 	}
 	
 	override private function board_initialize():Void 
@@ -62,9 +58,6 @@ class PeaceGame extends Game
 	override public function resize(sWidth:Int, sHeight:Int):Dynamic 
 	{
 		super.resize(sWidth, sHeight);
-		done.scaleX = done.scaleY = 0.7;
-		done.x = Auxi.center(done.width, Auxi.screenWidth);
-		done.y = tileContainer.y + tileContainer.height + 16;
 	}
 	
 	override private function clear_selected():Void 
@@ -92,9 +85,8 @@ class PeaceGame extends Game
 		}
 	}
 	
-	private function do_gameover():Void {
-		tileContainer.mouseEnabled = false;
-		tileContainer.mouseChildren = false;
+	override private function do_gameover():Void {
+		super.do_gameover();
 		Actuate.timer(2.5).onComplete(Main.instance.game_over);
 	}
 	
@@ -132,6 +124,11 @@ class PeaceGame extends Game
 			}
 		}
 		return false;
+	}
+	
+	override public function destroy():Void 
+	{
+		super.destroy();
 	}
 	
 	#if debug
