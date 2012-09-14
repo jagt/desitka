@@ -4,7 +4,7 @@ Naming: desitka - tens in Czech ftw.
 !2. Help.
 3. High Score
 !3. Zen Mode initialize
-3. GiveUp button
+!3. GiveUp button
 4. Audio, using Ableton Operators
 
 - no bg

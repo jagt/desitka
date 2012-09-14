@@ -88,6 +88,7 @@ class PeaceGame extends Game
 	override private function do_gameover():Void {
 		super.do_gameover();
 		Actuate.timer(2.5).onComplete(Main.instance.game_over);
+		Main.instance.menu.set_score(false, score);
 	}
 	
 	private function has_more_move():Bool {

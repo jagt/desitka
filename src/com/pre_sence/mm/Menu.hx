@@ -5,6 +5,7 @@ import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
 import nme.text.TextFieldAutoSize;
+import nme.net.SharedObject;
 
 /**
  * ...
@@ -17,6 +18,9 @@ class Menu extends Sprite
 	public var puzzleMode:TextField;
 	public var zenMode:TextField;
 	public var help:TextField;
+	public var shared:SharedObject;
+	public var puzzleHi:TextField;
+	public var zenHi:TextField;
 	
 	public function new() 
 	{
@@ -38,6 +42,61 @@ class Menu extends Sprite
 		addChild(puzzleMode);
 		addChild(zenMode);
 		addChild(help);
+		
+		shared = SharedObject.getLocal("disatka-shared");
+		if (shared.data.puzzle_high == null) {
+			shared.data.puzzle_high = 0;
+		}
+		if (shared.data.zen_high == null) {
+			shared.data.zen_high = 0;
+		}
+		
+		var hiFormat = new TextFormat(Auxi.latoBoldFont.fontName,
+			16, Auxi.fontColor);
+		hiFormat.align = TextFormatAlign.LEFT;
+		
+		puzzleHi = new TextField();
+		zenHi = new TextField();
+		Auxi.set_field(puzzleHi, hiFormat);
+		Auxi.set_field(zenHi, hiFormat);
+		puzzleHi.autoSize = TextFieldAutoSize.LEFT;
+		zenHi.autoSize = TextFieldAutoSize.LEFT;
+		puzzleHi.text = "High Score : " + shared.data.puzzle_high;
+		zenHi.text = "High Score : " + shared.data.zen_high;
+		addChild(puzzleHi);
+		addChild(zenHi);
+		
+		flush_shared();
+	}
+	
+	public function set_score(is_puzzle:Bool, n:Int) {
+		if (is_puzzle) {
+			if (n > shared.data.puzzle_high) {
+				shared.data.puzzle_high = n;
+				puzzleHi.text = "High Score : " + n;
+			} else {
+				return;
+			}
+		} else {
+			if (n > shared.data.zen_high) {
+				shared.data.zen_high = n;
+				zenHi.text = "High Score : " + n;
+			} else {
+				return;
+			}
+		}
+		flush_shared();
+	}
+	
+	private function flush_shared():Void {
+		// flush and center
+		try {
+			shared.flush() ;      // Save the object
+		} catch ( e:Dynamic ) {
+			trace("shared object flushing error");
+		}
+		puzzleHi.x = Auxi.center(puzzleHi.width, Auxi.screenWidth);
+		zenHi.x = Auxi.center(zenHi.width, Auxi.screenWidth);
 	}
 
 	public function resize(sWidth:Int, sHeight:Int) {
@@ -58,6 +117,10 @@ class Menu extends Sprite
 		puzzleMode.y = logo.y + logo.height + gap;
 		zenMode.y = puzzleMode.y + 60 + gap;
 		help.y = zenMode.y + 60 + gap;
+		
+		// layout high scores
+		puzzleHi.y = puzzleMode.y + puzzleMode.height + 2;
+		zenHi.y = zenMode.y + zenMode.height + 2;
 		
 	}
 	

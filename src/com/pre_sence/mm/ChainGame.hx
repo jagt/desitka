@@ -104,7 +104,8 @@ class ChainGame extends Game
 	
 	override private function do_gameover():Void {
 		super.do_gameover();
-		Actuate.stop(bar);
+		// stops and do not call destroy at the end
+		Actuate.stop(bar, null, false, false);
 		// this becomes hacky since clear_complete removes its self
 		// from the array.
 		while (summed.length > 0) {
@@ -112,6 +113,7 @@ class ChainGame extends Game
 			summed[0].clear_complete();
 		}
 		Actuate.timer(1.5).onComplete(Main.instance.game_over);
+		Main.instance.menu.set_score(true, score);
 	}
 	
 	override public function resize(sWidth:Int, sHeight:Int):Dynamic 

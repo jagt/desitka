@@ -18,6 +18,7 @@ class Main extends Sprite
 	public var over:GameOver;
 	public var help:Help;
 	public var bg:Background;
+
 	
 	private var is_helping:Bool;
 	
