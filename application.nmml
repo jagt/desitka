@@ -3,7 +3,7 @@
 	<!-- NMML reference: https://gist.github.com/1763850 -->
 	
 	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
-	<meta title="MathMachine" package="com.pre_sence.mm.MathMachine" version="1.0.0" company="lilo" />
+	<meta title="desitka" package="com.pre_sence.mm.MathMachine" version="1.0.0" company="lilo" />
 	
 	<!-- output -->
 	<app main="com.pre_sence.mm.Main" file="MathMachine" path="bin" />
