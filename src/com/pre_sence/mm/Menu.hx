@@ -93,7 +93,7 @@ class Menu extends Sprite
 		try {
 			shared.flush() ;      // Save the object
 		} catch ( e:Dynamic ) {
-			trace("shared object flushing error");
+			//trace("shared object flushing error");
 		}
 		puzzleHi.x = Auxi.center(puzzleHi.width, Auxi.screenWidth);
 		zenHi.x = Auxi.center(zenHi.width, Auxi.screenWidth);
@@ -112,8 +112,6 @@ class Menu extends Sprite
 		logo.y = 64;
 		var remain = sHeight - logo.y - logo.height - 64;
 		var gap = (remain - 60 * 3) / 4;
-		trace(remain);
-		trace(gap);
 		puzzleMode.y = logo.y + logo.height + gap;
 		zenMode.y = puzzleMode.y + 60 + gap;
 		help.y = zenMode.y + 60 + gap;

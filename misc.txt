@@ -10,6 +10,9 @@ Naming: desitka - tens in Czech ftw.
 - no bg
 - select(button click), deselect, summed, clear, gameover
 
-issues:
+Game issues:
+Should handle volume key during game.
+
+NME issues:
 TouchOver seems broken, returning stage object
 mouseEnabled is not useful on CPP targets.

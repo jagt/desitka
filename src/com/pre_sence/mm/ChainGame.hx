@@ -43,7 +43,6 @@ class SummedTiles
 		}
 		reset_tween();
 		Auxi.sumSnd.play();
-		trace("pushed");
 	}
 	
 	private function start_tween():Void {
@@ -82,7 +81,6 @@ class SummedTiles
 		cgame.drop_tiles();
 		cgame = null;
 		Auxi.clearSnd.play();
-		trace("cleared called");
 	}
 }
  
@@ -151,7 +149,6 @@ class ChainGame extends Game
 				var sumtile = new SummedTiles(this);
 				sumtile.push_arr(selected.arr);
 				summed.push(sumtile);
-				trace("new sumtile");
 			}
 		} else {
 			for (ix in 0...selected.length-1) {

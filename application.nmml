@@ -30,5 +30,7 @@
 	<!-- optimize JS output -->
 	<haxeflag name="--dead-code-elimination" if="html5" />
 	<haxeflag name="--js-modern" if="html5" />
+
+        <template path="template/android/src" rename="src" if="android" />
 	
 </project>

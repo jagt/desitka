@@ -61,10 +61,10 @@ class GameOver extends Sprite
 			Main.instance.game.destroy();
 		}
 		Main.instance.transit(this, Main.instance.menu, true);
-		trace(Main.instance.numChildren);
-		trace("Mem:"+System.totalMemory);
+		//trace(Main.instance.numChildren);
+		//trace("Mem:"+System.totalMemory);
 		System.gc();
-		trace("Mem:" + System.totalMemory);
+		//trace("Mem:" + System.totalMemory);
 		Auxi.clearSnd.play();
 	}
 	

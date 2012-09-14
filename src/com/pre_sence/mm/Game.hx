@@ -248,7 +248,6 @@ class Game extends Sprite
 	}
 	
 	public function destroy():Void {
-		trace("destryoied");
 		Main.instance.game = null;
 		parent.removeChild(this);
 		removeEventListener(MouseEvent.CLICK, this_onClick);

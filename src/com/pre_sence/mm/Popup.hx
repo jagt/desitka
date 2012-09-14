@@ -56,7 +56,6 @@ class Popup
 		var globpos = tile.localToGlobal(new Point(0, 0));
 		field.x = globpos.x + Auxi.center(field.width, Auxi.tileSize);
 		field.y = globpos.y;
-		trace(field.width);
 		var dist = Auxi.tileSize * 0.7;
 		Actuate.tween(field, 1.0, { y:field.y - dist } ).onComplete(function():Void {
 			Actuate.apply(field, { visible:false } );

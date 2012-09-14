@@ -119,7 +119,7 @@ class PeaceGame extends Game
 					&& ty >= 0 && ty < Game.ROWS
 					&& !(ix == jx && jx == 0)) {
 					if (tiles[ty][tx] != null && tiles[ty][tx].state != State.Summed) {
-						trace(tx + "," + ty);
+						//trace(tx + "," + ty);
 						count++;
 						if (count >= 2) return true;
 					}
@@ -140,7 +140,7 @@ class PeaceGame extends Game
 		super.this_onClick(event);
 		if (Std.is(event.target, Tile)) {
 			var tile = cast(event.target, Tile);
-			trace(has_two_neighbor(tile));
+			//trace(has_two_neighbor(tile));
 		}
 	}
 	#end
