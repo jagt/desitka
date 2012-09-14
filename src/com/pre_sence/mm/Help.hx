@@ -94,19 +94,19 @@ class Help extends Sprite
 		addChild(a2);
 		
 		// PASTA!
-		var format = new TextFormat(Auxi.latoFont.fontName, 32, Auxi.fontColor);
+		var format = new TextFormat(Auxi.latoFont.fontName, 24, Auxi.fontColor);
 		format.align = TextFormatAlign.LEFT;
 		
 		var last = new TextField();
 		Auxi.set_field(last, format);
 		last.autoSize = TextFieldAutoSize.LEFT;
-		last.text = "  Puzzle : Combo by grouping adjacent +10s.\n  Zen : Fixed amount of blocks.";
+		last.text = "  Puzzle : Combo by grouping adjacent +10s.\n  Zen : Fixed amount of blocks.\n  *Click anywhere to return*\n  ";
 		last.y = a2.y + 2.5 * Auxi.tileSize;
 		addChild(last);
 		
 		x = -Auxi.screenWidth * 2;
-		this.mouseEnabled = false;
-		this.mouseChildren = false;
+		//this.mouseEnabled = false;
+		//this.mouseChildren = false;
 	}
 	
 	public function resize(sWidth:Int, sHeight:Int) {

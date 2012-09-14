@@ -58,6 +58,9 @@ class Main extends Sprite
 		menu.zenMode.addEventListener(MouseEvent.CLICK, zen_click_zen);
 		menu.help.addEventListener(MouseEvent.CLICK, help_click_help);
 		bg.addEventListener(MouseEvent.CLICK, bg_on_click);
+		// mouseEnabled = false is not working on mobile
+		// use a handler to handle clicking on help sprite
+		help.addEventListener(MouseEvent.CLICK, help_on_click);
 	}
 	
 	public function transit(from:Sprite, to:Sprite, ?cb:Void->Void, backward:Bool = false) {
@@ -109,16 +112,20 @@ class Main extends Sprite
 		transit(menu, game);
 	}
 	
+	private function help_on_click(event:MouseEvent):Void {
+		if (is_helping) {
+			transit(help, menu, true);
+			is_helping = false;
+		}
+	}
+	
 	private function bg_on_click(event:MouseEvent):Void {
 		// avoid handlers to avoid memleak
 		if (game != null) {
 			game.click_final(event);
 		}
 		
-		if (is_helping) {
-			transit(help, menu, true);
-			is_helping = false;
-		}
+		help_on_click(event);
 	}
 	
 	static public function main() 
