@@ -22,7 +22,35 @@ class PeaceGame extends Game
 	
 	override private function board_initialize():Void 
 	{
-		super.board_initialize();
+		var arr = new Array<Int>();
+		for (ix in 0...10) {
+			for (jx in 0...4) {
+				arr.push(ix);
+			}
+		}
+		for (ix in 4...10) {
+			for (jx in 0...4) {
+				arr.push(ix);
+			}
+		}
+		// shuffle
+		for (ix in 0...arr.length) {
+			var top = arr.length - ix - 1;
+			var cur = Math.floor( Math.random() * (top + 1) );
+			// swap top/cur
+			var tmp = arr[top];
+			arr[top] = arr[cur];
+			arr[cur] = tmp;
+		}
+		
+		Auxi.assert(arr.length == 64);
+		for (row in 0...Game.ROWS) {
+			tiles[row] = new Array<Tile>();
+			for (col in 0...Game.COLS) {
+				var val = arr.pop();
+				var tile = add_tile(row, col, val);
+			}
+		}
 	}
 	
 	override private function select_done():Void 
