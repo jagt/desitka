@@ -32,5 +32,6 @@
 	<haxeflag name="--js-modern" if="html5" />
 
         <template path="template/android/src" rename="src" if="android" />
+        <certificate path="C:\SHARED\Dev\__current\mathmachine\release\android\my-release-key.keystore" alias="android" if="android" />
 	
 </project>

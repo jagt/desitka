@@ -62,12 +62,11 @@ class Auxi
 	}
 	
 	static public function assert(cond:Bool, msg:String = "assert error") {
-		#if release
-		return; // reality check bitch!
-		#end
+		#if debug
 		if (!cond) {
 			throw msg;
 		}
+		#end
 	}
 	
 	static inline public function int_max(a:Int, b:Int):Int {
