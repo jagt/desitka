@@ -10,7 +10,7 @@ Released Android version: <https://play.google.com/store/apps/details?id=com.pre
 
 Install [NME](http://nme.io) and make sure you have FlexSDK installed. Then just test with:
 
-    nme run application.nmml flash
+    nme test application.nmml flash
 
 Tested on NME 3.5.4
 
