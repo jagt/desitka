@@ -3,7 +3,7 @@ desitka
 
 A novel (but really boring) puzzle game made in Haxe and NME
 
-[Released Flash version](http://www.kongregate.com/games/lilo/desitka)
+[Released Flash version](http://www.kongregate.com/games/lilo/desitka)  
 [Released Android version](https://play.google.com/store/apps/details?id=com.pre_sence.mm.MathMachine&hl=en)
 
 ## Build
